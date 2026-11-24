@@ -33,6 +33,7 @@ icons/              앱 아이콘(192·512px)
 `data.js`만 고치면 됩니다.
 
 - 운동 추가·수정: `workouts.A.exercises` 등에 `{ id, name, sets, reps, rpe, rest, load, cue }` 형식으로 적습니다. `rest`는 초 단위입니다.
+- 영상 링크: 운동·수영 블록 이름을 누르면 유튜브에서 "이름 + 자세"로 검색합니다. 검색어를 바꾸려면 그 항목에 `video: "검색어"`를 적습니다.
 - 요일 바꾸기: `schedule`의 숫자(0=일 … 6=토)와 운동 키를 바꿉니다.
 - 주차 강도: `weeks`의 `rpe`, `setDelta`, `volumeFactor`, `swimPct`, `cssDelta`를 조정합니다.
 - 운동 `id`는 기록과 그래프를 잇는 열쇠입니다. 이름만 바꿀 때는 `id`를 그대로 두세요.

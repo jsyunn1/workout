@@ -10,6 +10,10 @@ window.DATA = {
 
   cycleWeeks: 4,
 
+  // 운동 이름을 누르면 유튜브에서 "이름 + videoSuffix"로 검색합니다.
+  // 운동·수영 블록마다 video: "검색어"를 적으면 그 검색어를 대신 씁니다.
+  videoSuffix: "자세",
+
   timeline: {
     weight: [
       { start: "10:30", end: "10:40", label: "간식", detail: "바나나·요거트 등" },
@@ -37,7 +41,7 @@ window.DATA = {
           cue: "힙 힌지, 허리 중립" },
         { id: "bss", name: "불가리안 스플릿 스쿼트", sets: 2, reps: "8(한쪽씩)", rpe: "7", rest: 90, load: true,
           cue: "좌우 불균형 점검" },
-        { id: "deadbug", name: "데드버그 + 사이드 플랭크", sets: 3, reps: "10회 / 30초", rpe: null, rest: 60, load: false,
+        { id: "deadbug", video: "데드버그 사이드 플랭크", name: "데드버그 + 사이드 플랭크", sets: 3, reps: "10회 / 30초", rpe: null, rest: 60, load: false,
           unit: "라운드", cue: "갈비뼈가 뜨지 않게, 호흡 조절" }
       ]
     },
@@ -48,46 +52,46 @@ window.DATA = {
           cue: "견갑을 모으고 내린 채 고정" },
         { id: "csrow", name: "체스트 서포티드 로우", sets: 4, reps: "8", rpe: "7~8", rest: 90, load: true,
           cue: "등 중간 수축, 라운드숄더 교정" },
-        { id: "pullup", name: "풀업 또는 랫풀다운", sets: 3, reps: "8", rpe: "7", rest: 90, load: true,
+        { id: "pullup", video: "풀업 랫풀다운 자세", name: "풀업 또는 랫풀다운", sets: 3, reps: "8", rpe: "7", rest: 90, load: true,
           cue: "어깨를 으쓱하지 않기" },
-        { id: "facepull", name: "페이스풀 + 밴드 풀어파트", sets: 3, reps: "15 / 20", rpe: null, rest: 45, load: true,
+        { id: "facepull", video: "페이스풀 밴드 풀어파트", name: "페이스풀 + 밴드 풀어파트", sets: 3, reps: "15 / 20", rpe: null, rest: 45, load: true,
           cue: "어깨 바깥 회전, 하부 승모근" }
       ]
     },
     C: {
       name: "웨이트 C", type: "weight", focus: "힙힌지, 한쪽씩 하는 동작, 들고 걷기",
       exercises: [
-        { id: "deadlift", name: "데드리프트(트랩바 가능)", sets: 4, reps: "4", rpe: "7~8", rest: 150, load: true,
+        { id: "deadlift", video: "데드리프트 자세", name: "데드리프트(트랩바 가능)", sets: 4, reps: "4", rpe: "7~8", rest: 150, load: true,
           cue: "들기 전 랫을 당겨 긴장 만들기" },
-        { id: "landmine", name: "랜드마인 프레스 또는 푸시업", sets: 3, reps: "10", rpe: "7", rest: 90, load: true,
+        { id: "landmine", video: "랜드마인 프레스 자세", name: "랜드마인 프레스 또는 푸시업", sets: 3, reps: "10", rpe: "7", rest: 90, load: true,
           cue: "어깨에 부담이 적은 밀기 동작" },
         { id: "dbrow", name: "원암 덤벨 로우", sets: 3, reps: "10(한쪽씩)", rpe: "7", rest: 60, load: true,
           cue: "몸통이 돌아가지 않게" },
-        { id: "carry", name: "파머스 캐리 + 팔로프 프레스", sets: 3, reps: "30m / 10회", rpe: null, rest: 60, load: true,
+        { id: "carry", video: "파머스 캐리 팔로프 프레스", name: "파머스 캐리 + 팔로프 프레스", sets: 3, reps: "30m / 10회", rpe: null, rest: 60, load: true,
           cue: "바른 자세 유지, 몸통 회전 버티기" }
       ]
     },
     S1: {
       name: "수영 1", type: "swim", focus: "유산소·역치(CSS)", approx: "약 2,300m",
       blocks: [
-        { id: "wu", name: "워밍업", reps: 1, dist: 400, rest: 0, detail: "자유형·배영 섞어서 여유 있게" },
-        { id: "drill", name: "드릴", reps: 4, dist: 50, rest: 10, detail: "25m 드릴 + 25m 스윔" },
-        { id: "main", name: "메인", reps: 12, dist: 100, rest: 10, main: true, css: true,
+        { id: "wu", name: "워밍업", reps: 1, dist: 400, video: "수영 워밍업 루틴", rest: 0, detail: "자유형·배영 섞어서 여유 있게" },
+        { id: "drill", name: "드릴", reps: 4, dist: 50, video: "자유형 드릴", rest: 10, detail: "25m 드릴 + 25m 스윔" },
+        { id: "main", name: "메인", reps: 12, dist: 100, video: "수영 CSS 훈련 페이스", rest: 10, main: true, css: true,
           detail: "자유형 CSS 페이스. 4개마다 페이스 점검, 끝까지 일정하게" },
-        { id: "speed", name: "스피드", reps: 4, dist: 25, rest: 30, detail: "전력" },
-        { id: "cd", name: "쿨다운", reps: 1, dist: 200, rest: 0, detail: "천천히" }
+        { id: "speed", name: "스피드", reps: 4, dist: 25, video: "자유형 스프린트 훈련", rest: 30, detail: "전력" },
+        { id: "cd", name: "쿨다운", reps: 1, dist: 200, video: "수영 쿨다운", rest: 0, detail: "천천히" }
       ]
     },
     S2: {
       name: "수영 2", type: "swim", focus: "기술·스피드·개인혼영", approx: "약 2,000m",
       note: "금요일 데드리프트가 있으니 고강도는 피하기",
       blocks: [
-        { id: "wu", name: "워밍업", reps: 1, dist: 500, rest: 0, detail: "자유형 300m + 킥 200m" },
-        { id: "drill", name: "드릴", reps: 8, dist: 50, rest: 0, detail: "개인혼영 순서(영법마다 2개, 25m 드릴 + 25m 스윔)" },
-        { id: "main", name: "메인", reps: 6, dist: 100, rest: 15, main: true,
+        { id: "wu", name: "워밍업", reps: 1, dist: 500, video: "수영 킥 훈련", rest: 0, detail: "자유형 300m + 킥 200m" },
+        { id: "drill", name: "드릴", reps: 8, dist: 50, video: "개인혼영 드릴", rest: 0, detail: "개인혼영 순서(영법마다 2개, 25m 드릴 + 25m 스윔)" },
+        { id: "main", name: "메인", reps: 6, dist: 100, video: "개인혼영 턴 스트림라인", rest: 15, main: true,
           detail: "개인혼영. 1~3번 점점 빠르게, 4~6번 일정하게. 턴·스트림라인 집중" },
-        { id: "pull", name: "풀", reps: 1, dist: 200, rest: 0, detail: "풀부이로 스트로크 수 줄이기" },
-        { id: "cd", name: "쿨다운", reps: 1, dist: 100, rest: 0, detail: "배영" }
+        { id: "pull", name: "풀", reps: 1, dist: 200, video: "풀부이 수영 훈련", rest: 0, detail: "풀부이로 스트로크 수 줄이기" },
+        { id: "cd", name: "쿨다운", reps: 1, dist: 100, video: "배영 자세", rest: 0, detail: "배영" }
       ]
     }
   },

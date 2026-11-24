@@ -115,7 +115,18 @@ p { margin: 4px 0; }
 
 /* 운동 카드 */
 .ex-meta { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0; }
-.cue { font-size: .9rem; color: var(--muted); margin: 4px 0 10px; }
+.yt {
+  color: inherit; text-decoration: underline; text-decoration-color: var(--line);
+  text-underline-offset: 3px; display: inline-flex; align-items: center; gap: 6px;
+  min-height: 32px;
+}
+.yt-ico {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 22px; height: 16px; border-radius: 4px;
+  background: #e11d48; color: #fff; font-size: 9px; text-decoration: none; flex: none;
+}
+.plan-list .yt { min-height: 0; }
+.cue {font-size: .9rem; color: var(--muted); margin: 4px 0 10px; }
 .cue::before { content: "교정 · "; color: var(--warn); font-weight: 600; }
 .sets { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
 .set {

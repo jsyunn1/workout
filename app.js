@@ -94,6 +94,16 @@
   function blockDist(b) { return b.reps * b.dist; }
   function blockText(b) { return b.reps > 1 ? b.reps + "×" + b.dist + "m" : b.dist + "m"; }
 
+  /* ---------- 유튜브 영상 검색 링크 ---------- */
+  function videoUrl(item) {
+    const q = item.video || (item.name + " " + (D.videoSuffix || "")).trim();
+    return "https://www.youtube.com/results?search_query=" + encodeURIComponent(q);
+  }
+  function videoLink(item) {
+    return '<a class="yt" href="' + esc(videoUrl(item)) + '" target="_blank" rel="noopener" aria-label="' +
+      esc(item.name) + ' 유튜브 영상 검색">' + esc(item.name) + '<span class="yt-ico" aria-hidden="true">▶</span></a>';
+  }
+
   /* ---------- 기록 ---------- */
   function records() { return load(KEY.records, []); }
   function lastWeight(exId, beforeDate) {
@@ -232,8 +242,8 @@
           setBtns += '<button type="button" class="set" data-act="set" data-ex="' + ex.id + '" data-i="' + i + '" data-rest="' + ex.rest +
             '" aria-pressed="' + (sets[i] ? "true" : "false") + '" aria-label="' + (i + 1) + '세트">' + (i + 1) + "</button>";
         }
-        html += '<section class="card">' +
-          '<h3>' + esc(ex.name) + "</h3>" +
+        html += '<section class="card" data-name="' + esc(ex.name) + '">' +
+          '<h3>' + videoLink(ex) + "</h3>" +
           '<div class="ex-meta"><span class="pill' + (ex.setsChanged ? " warn" : "") + '">' + ex.sets + "×" + esc(ex.reps) + (ex.unit ? " " + esc(ex.unit) : "") + "</span>" +
           (ex.rpe ? '<span class="pill' + (ex.rpeChanged ? " warn" : "") + '">RPE ' + esc(ex.rpe) + "</span>" : "") +
           '<span class="pill">휴식 ' + fmtSec(ex.rest) + "</span></div>" +
@@ -260,7 +270,7 @@
         const on = !!draft.blocks[b.id];
         return '<div class="block' + (b.main ? " main" : "") + '">' +
           '<button type="button" class="check" data-act="block" data-block="' + b.id + '" data-rest="' + b.rest + '" aria-pressed="' + on + '" aria-label="' + esc(b.name) + ' 완료">✓</button>' +
-          '<div class="grow"><div class="row between"><h3>' + esc(b.name) + "</h3>" +
+          '<div class="grow"><div class="row between"><h3>' + videoLink(b) + "</h3>" +
           '<span class="pill' + (b.repsChanged ? " warn" : "") + '">' + blockText(b) + "</span></div>" +
           '<p class="small muted">' + esc(b.detail) + (b.rest ? " · 휴식 " + b.rest + "초" : "") + "</p>" +
           (b.css ? '<div class="inputs" style="margin-top:8px"><label>이번 CSS 페이스(분:초/100m)<input type="text" inputmode="numeric" data-field="css" value="' + esc(draft.css || "") + '" placeholder="' + (prevCss ? fmtSec(prevCss) : "1:45") + '"></label></div>' +
@@ -343,7 +353,7 @@
         (dow === todayDow ? ' <span class="today-badge small">오늘</span>' : "") + '</h3></div><p class="muted small">' + esc(w.focus) + '</p><ul class="plan-list">';
       if (w.type === "weight") {
         w.exercises.map(e => adjustExercise(e, wk)).forEach(ex => {
-          html += "<li><span>" + esc(ex.name) + '</span><span class="v">' +
+          html += "<li><span>" + videoLink(ex) + '</span><span class="v">' +
             '<span class="' + (ex.setsChanged ? "changed" : "") + '">' + ex.sets + "</span>×" + esc(ex.reps) +
             (ex.rpe ? ' · <span class="' + (ex.rpeChanged ? "changed" : "") + '">RPE ' + esc(ex.rpe) + "</span>" : "") + "</span></li>";
         });
@@ -351,7 +361,7 @@
       } else {
         const blocks = w.blocks.map(b => adjustBlock(b, wk));
         blocks.forEach(b => {
-          html += "<li><span>" + esc(b.name) + '</span><span class="v ' + (b.repsChanged ? "changed" : "") + '">' + blockText(b) + "</span></li>";
+          html += "<li><span>" + videoLink(b) + '</span><span class="v ' + (b.repsChanged ? "changed" : "") + '">' + blockText(b) + "</span></li>";
         });
         const total = blocks.reduce((s, b) => s + blockDist(b), 0);
         html += "<li><strong>합계</strong><span class=\"v\"><strong>" + total.toLocaleString() + "m</strong>" +
@@ -655,7 +665,7 @@
         el.setAttribute("aria-pressed", String(!!arr[i]));
         if (arr[i]) {
           const card = el.closest("section");
-          startTimer(Number(el.dataset.rest), card ? card.querySelector("h3").textContent : "");
+          startTimer(Number(el.dataset.rest), card ? card.dataset.name || "" : "");
         }
         break;
       }
