@@ -1,5 +1,7 @@
 # 점심 운동 (PWA)
 
+**앱 주소: https://jsyunn1.github.io/workout/**
+
 평일 점심 90분(11:30~13:00) 운동 프로그램을 휴대폰에서 확인하고 기록하는 웹앱입니다.
 월·수·금 웨이트, 화·목 수영(마스터즈 수준) 루틴과 4주 주기 강도 조정을 담고 있습니다.
 빌드 도구와 외부 라이브러리 없이 바닐라 HTML/CSS/JS로 동작하며, 오프라인에서도 쓸 수 있습니다.
@@ -48,17 +50,17 @@ python -m http.server 8765
 
 ## GitHub Pages 배포
 
-1. GitHub에서 새 저장소를 만듭니다(예: `<저장소 이름>`). 공개(Public) 저장소여야 무료 플랜에서 Pages를 쓸 수 있습니다.
+1. GitHub에서 새 저장소를 만듭니다(`workout`). 공개(Public) 저장소여야 무료 플랜에서 Pages를 쓸 수 있습니다.
 2. 이 폴더를 올립니다.
 
    ```powershell
-   git remote add origin https://github.com/<사용자명>/<저장소 이름>.git
+   git remote add origin https://github.com/jsyunn1/workout.git
    git branch -M main
    git push -u origin main
    ```
 
 3. 저장소의 **Settings → Pages**에서 **Source: Deploy from a branch**, **Branch: `main` / `/(root)`**를 고르고 저장합니다.
-4. 1~2분 뒤 `https://<사용자명>.github.io/<저장소 이름>/`에서 열립니다. 모든 경로가 상대 경로라 하위 경로에서도 그대로 동작합니다.
+4. 1~2분 뒤 `https://jsyunn1.github.io/workout/`에서 열립니다. 모든 경로가 상대 경로라 하위 경로에서도 그대로 동작합니다.
 
 ## 휴대폰 홈 화면에 추가
 
