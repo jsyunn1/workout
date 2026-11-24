@@ -72,24 +72,24 @@ window.DATA = {
       ]
     },
     S1: {
-      name: "수영 1", type: "swim", focus: "유산소·역치(CSS)", approx: "약 2,300m",
+      name: "수영 1", type: "swim", focus: "유산소·역치(CSS)", approx: "약 1,500m",
       blocks: [
-        { id: "wu", name: "워밍업", reps: 1, dist: 400, video: "수영 워밍업 루틴", rest: 0, detail: "자유형·배영 섞어서 여유 있게" },
+        { id: "wu", name: "워밍업", reps: 1, dist: 300, video: "수영 워밍업 루틴", rest: 0, detail: "자유형·배영 섞어서 여유 있게" },
         { id: "drill", name: "드릴", reps: 4, dist: 50, video: "자유형 드릴", rest: 10, detail: "25m 드릴 + 25m 스윔" },
-        { id: "main", name: "메인", reps: 12, dist: 100, video: "수영 CSS 훈련 페이스", rest: 10, main: true, css: true,
+        { id: "main", name: "메인", reps: 8, dist: 100, video: "수영 CSS 훈련 페이스", rest: 10, main: true, css: true,
           detail: "자유형 CSS 페이스. 4개마다 페이스 점검, 끝까지 일정하게" },
         { id: "speed", name: "스피드", reps: 4, dist: 25, video: "자유형 스프린트 훈련", rest: 30, detail: "전력" },
-        { id: "cd", name: "쿨다운", reps: 1, dist: 200, video: "수영 쿨다운", rest: 0, detail: "천천히" }
+        { id: "cd", name: "쿨다운", reps: 1, dist: 100, video: "수영 쿨다운", rest: 0, detail: "천천히" }
       ]
     },
     S2: {
-      name: "수영 2", type: "swim", focus: "기술·스피드·개인혼영", approx: "약 2,000m",
+      name: "수영 2", type: "swim", focus: "기술·스피드·개인혼영", approx: "약 1,200m",
       note: "금요일 데드리프트가 있으니 고강도는 피하기",
       blocks: [
-        { id: "wu", name: "워밍업", reps: 1, dist: 500, video: "수영 킥 훈련", rest: 0, detail: "자유형 300m + 킥 200m" },
-        { id: "drill", name: "드릴", reps: 8, dist: 50, video: "개인혼영 드릴", rest: 0, detail: "개인혼영 순서(영법마다 2개, 25m 드릴 + 25m 스윔)" },
-        { id: "main", name: "메인", reps: 6, dist: 100, video: "개인혼영 턴 스트림라인", rest: 15, main: true,
-          detail: "개인혼영. 1~3번 점점 빠르게, 4~6번 일정하게. 턴·스트림라인 집중" },
+        { id: "wu", name: "워밍업", reps: 1, dist: 300, video: "수영 킥 훈련", rest: 0, detail: "자유형 200m + 킥 100m" },
+        { id: "drill", name: "드릴", reps: 4, dist: 50, video: "개인혼영 드릴", rest: 0, detail: "개인혼영 순서(영법마다 1개, 25m 드릴 + 25m 스윔)" },
+        { id: "main", name: "메인", reps: 4, dist: 100, video: "개인혼영 턴 스트림라인", rest: 15, main: true,
+          detail: "개인혼영. 1~2번 점점 빠르게, 3~4번 일정하게. 턴·스트림라인 집중" },
         { id: "pull", name: "풀", reps: 1, dist: 200, video: "풀부이 수영 훈련", rest: 0, detail: "풀부이로 스트로크 수 줄이기" },
         { id: "cd", name: "쿨다운", reps: 1, dist: 100, video: "배영 자세", rest: 0, detail: "배영" }
       ]

@@ -1,5 +1,5 @@
 /* 오프라인 캐시. 파일을 바꿔 배포할 때 CACHE 버전을 올리면 확실히 갱신됩니다. */
-const CACHE = "lunch-workout-v4";
+const CACHE = "lunch-workout-v5";
 const ASSETS = [
   "./",
   "./index.html",
