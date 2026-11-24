@@ -625,12 +625,12 @@
 
   /* ---------- 공통 ---------- */
   let toastT = null;
-  function toast(msg) {
+  function toast(msg, ms) {
     const el = document.getElementById("toast");
     el.textContent = msg;
     el.hidden = false;
     clearTimeout(toastT);
-    toastT = setTimeout(() => { el.hidden = true; }, 2200);
+    toastT = setTimeout(() => { el.hidden = true; }, ms || 2200);
   }
 
   function setTab(tab) {
@@ -768,9 +768,46 @@
   const initial = location.hash.slice(1);
   setTab(["today", "week", "log", "info"].includes(initial) ? initial : "today");
 
+  /* ---------- 새 버전 자동 반영 ---------- */
+  // 새 서비스 워커가 페이지를 넘겨받으면(controllerchange) 새로고침해 새 버전을 보여 줍니다.
+  // 입력 중이거나 휴식 타이머가 도는 중이면 끝날 때까지 미룹니다.
+  try {
+    if (sessionStorage.getItem("lw.updated")) {
+      sessionStorage.removeItem("lw.updated");
+      setTimeout(() => toast("새 버전으로 업데이트했습니다", 4000), 300);
+    }
+  } catch (e) { /* 무시 */ }
+
   if ("serviceWorker" in navigator && location.protocol !== "file:") {
+    const hadController = !!navigator.serviceWorker.controller;
+    let pendingReload = false;
+    let reg = null;
+    const busy = () => {
+      const a = document.activeElement;
+      const typing = !!(a && a.dataset && a.dataset.field);
+      const timing = !tEl.box.hidden && !timer.finished;
+      return typing || timing;
+    };
+    const tryReload = () => {
+      if (!pendingReload || busy()) return;
+      pendingReload = false;
+      try { sessionStorage.setItem("lw.updated", "1"); } catch (e) { /* 무시 */ }
+      location.reload();
+    };
+    navigator.serviceWorker.addEventListener("controllerchange", () => {
+      if (!hadController) return; // 처음 설치할 때는 새로고침할 필요 없음
+      pendingReload = true;
+      if (busy()) toast("새 버전이 준비됐습니다. 휴식이 끝나면 반영됩니다", 4000);
+      tryReload();
+    });
+    setInterval(tryReload, 3000);
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "visible" && reg) reg.update().catch(() => { /* 오프라인 */ });
+    });
     window.addEventListener("load", () => {
-      navigator.serviceWorker.register("service-worker.js").catch(() => { /* 오프라인 미지원 환경 */ });
+      navigator.serviceWorker.register("service-worker.js")
+        .then(r => { reg = r; })
+        .catch(() => { /* 오프라인 미지원 환경 */ });
     });
   }
 

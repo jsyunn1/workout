@@ -37,7 +37,7 @@ icons/              앱 아이콘(192·512px)
 - 요일 바꾸기: `schedule`의 숫자(0=일 … 6=토)와 운동 키를 바꿉니다.
 - 주차 강도: `weeks`의 `rpe`, `setDelta`, `volumeFactor`, `swimPct`, `cssDelta`를 조정합니다.
 - 운동 `id`는 기록과 그래프를 잇는 열쇠입니다. 이름만 바꿀 때는 `id`를 그대로 두세요.
-- 배포 후 휴대폰에 바로 반영되게 하려면 `service-worker.js`의 `CACHE` 값(예: `lunch-workout-v2` → `v3`)도 올려 주세요.
+- 배포 후 휴대폰에 바로 반영되게 하려면 `service-worker.js`의 `CACHE` 값(예: `lunch-workout-v4` → `v5`)도 올려 주세요. 그러면 앱을 열 때 새 버전을 받아 스스로 새로고침하고 "새 버전으로 업데이트했습니다"를 띄웁니다. 입력 중이거나 휴식 타이머가 도는 중이면 끝난 뒤에 새로고침합니다.
 
 ## 로컬에서 실행
 
