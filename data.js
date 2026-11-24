@@ -72,25 +72,32 @@ window.DATA = {
       ]
     },
     S1: {
-      name: "수영 1", type: "swim", focus: "유산소·역치(CSS)", approx: "약 1,500m",
+      name: "수영 1", type: "swim", focus: "유산소·역치(CSS) + 배영·평영", approx: "약 1,500m",
       blocks: [
-        { id: "wu", name: "워밍업", reps: 1, dist: 300, video: "수영 워밍업 루틴", rest: 0, detail: "자유형·배영 섞어서 여유 있게" },
-        { id: "drill", name: "드릴", reps: 4, dist: 50, video: "자유형 드릴", rest: 10, detail: "25m 드릴 + 25m 스윔" },
-        { id: "main", name: "메인", reps: 8, dist: 100, video: "수영 CSS 훈련 페이스", rest: 10, main: true, css: true,
-          detail: "자유형 CSS 페이스. 4개마다 페이스 점검, 끝까지 일정하게" },
-        { id: "speed", name: "스피드", reps: 4, dist: 25, video: "자유형 스프린트 훈련", rest: 30, detail: "전력" },
-        { id: "cd", name: "쿨다운", reps: 1, dist: 100, video: "수영 쿨다운", rest: 0, detail: "천천히" }
+        { id: "wu", name: "워밍업", reps: 1, dist: 300, video: "수영 워밍업 루틴", rest: 0,
+          detail: "자유형 100m + 배영 100m + 평영 100m, 여유 있게" },
+        { id: "drill", name: "드릴", reps: 4, dist: 50, video: "접영 배영 평영 드릴", rest: 10,
+          detail: "접영·배영·평영·자유형 1개씩(25m 드릴 + 25m 스윔)" },
+        { id: "main", name: "메인 1 · 자유형", reps: 4, dist: 100, video: "수영 CSS 훈련 페이스", rest: 10, main: true, css: true,
+          detail: "자유형 CSS 페이스. 끝까지 일정하게" },
+        { id: "main2", name: "메인 2 · 배영/평영", reps: 4, dist: 100, video: "배영 평영 자세", rest: 15, main: true,
+          detail: "홀수는 배영, 짝수는 평영. 일정한 페이스로" },
+        { id: "speed", name: "스피드", reps: 4, dist: 25, video: "영법별 스프린트 훈련", rest: 30,
+          detail: "접영·배영·평영·자유형 순서로 전력" },
+        { id: "cd", name: "쿨다운", reps: 1, dist: 100, video: "수영 쿨다운", rest: 0, detail: "배영·평영 섞어서 천천히" }
       ]
     },
     S2: {
       name: "수영 2", type: "swim", focus: "기술·스피드·개인혼영", approx: "약 1,200m",
-      note: "금요일 데드리프트가 있으니 고강도는 피하기",
+      note: "다음 날 웨이트가 있으니 고강도는 피하기",
       blocks: [
-        { id: "wu", name: "워밍업", reps: 1, dist: 300, video: "수영 킥 훈련", rest: 0, detail: "자유형 200m + 킥 100m" },
+        { id: "wu", name: "워밍업", reps: 1, dist: 300, video: "평영 킥 훈련", rest: 0,
+          detail: "자유형 100m + 평영 킥(킥판) 100m + 배영 100m" },
         { id: "drill", name: "드릴", reps: 4, dist: 50, video: "개인혼영 드릴", rest: 0, detail: "개인혼영 순서(영법마다 1개, 25m 드릴 + 25m 스윔)" },
         { id: "main", name: "메인", reps: 4, dist: 100, video: "개인혼영 턴 스트림라인", rest: 15, main: true,
           detail: "개인혼영. 1~2번 점점 빠르게, 3~4번 일정하게. 턴·스트림라인 집중" },
-        { id: "pull", name: "풀", reps: 1, dist: 200, video: "풀부이 수영 훈련", rest: 0, detail: "풀부이로 스트로크 수 줄이기" },
+        { id: "pull", name: "접영·평영", reps: 1, dist: 200, video: "한팔 접영 드릴", rest: 0,
+          detail: "한팔 접영 드릴 4×25m + 평영 100m(스트로크 수 줄이기)" },
         { id: "cd", name: "쿨다운", reps: 1, dist: 100, video: "배영 자세", rest: 0, detail: "배영" }
       ]
     }
