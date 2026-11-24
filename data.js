@@ -6,7 +6,16 @@
  */
 window.DATA = {
   // 요일(0=일 … 6=토) → 운동 키. 없는 요일은 휴식
-  schedule: { 1: "A", 2: "S1", 3: "B", 4: "S2", 5: "C" },
+  // "W"는 웨이트 날: rotation 순서대로 돌아가며 배정됩니다(월 앞쪽 → 수 뒤쪽 → 금 앞쪽 → 다음 주 월 뒤쪽 …).
+  schedule: { 1: "W", 2: "S1", 3: "W", 4: "S2", 5: "W" },
+  rotation: ["FRONT", "BACK"],
+  // 시작일을 정하지 않았을 때 교대 순서의 기준이 되는 월요일
+  rotationStart: "2026-11-23",
+
+  // 예상 소요 시간 계산: 세트당 동작 시간(초, 운동별 work로 바꿀 수 있음), 워밍업·이동 시간(분)
+  setWorkSec: 45,
+  warmupMin: 5,
+  changeMin: 1,
 
   cycleWeeks: 4,
 
@@ -18,9 +27,9 @@ window.DATA = {
     weight: [
       { start: "10:30", end: "10:40", label: "간식", detail: "바나나·요거트 등" },
       { start: "11:30", end: "11:45", label: "이동·탈의", detail: "도보 약 10분" },
-      { start: "11:45", end: "12:35", label: "웨이트", detail: "50분(워밍업 5분 포함)", main: true },
-      { start: "12:35", end: "12:50", label: "샤워" },
-      { start: "12:50", end: "13:00", label: "복귀·간편식", detail: "단백질 위주" }
+      { start: "11:45", end: "12:25", label: "웨이트", detail: "30~40분(워밍업 5분 포함)", main: true },
+      { start: "12:25", end: "12:45", label: "샤워" },
+      { start: "12:45", end: "13:00", label: "복귀·간편식", detail: "단백질 위주" }
     ],
     swim: [
       { start: "10:30", end: "10:40", label: "간식", detail: "바나나·요거트 등" },
@@ -32,43 +41,34 @@ window.DATA = {
   },
 
   workouts: {
-    A: {
-      name: "웨이트 A", type: "weight", focus: "하체, 후면 사슬, 코어",
+    FRONT: {
+      name: "웨이트 앞쪽", type: "weight", focus: "몸 앞쪽: 허벅지, 가슴, 이두, 복근",
       exercises: [
-        { id: "squat", name: "백스쿼트", sets: 4, reps: "5", rpe: "7~8", rest: 150, load: true,
-          cue: "모든 렙에서 똑같이 브레이싱, 골반 중립" },
-        { id: "rdl", name: "루마니안 데드리프트", sets: 3, reps: "8", rpe: "7", rest: 120, load: true,
-          cue: "힙 힌지, 허리 중립" },
-        { id: "bss", name: "불가리안 스플릿 스쿼트", sets: 2, reps: "8(한쪽씩)", rpe: "7", rest: 90, load: true,
-          cue: "좌우 불균형 점검" },
-        { id: "deadbug", video: "데드버그 사이드 플랭크", name: "데드버그 + 사이드 플랭크", sets: 3, reps: "10회 / 30초", rpe: null, rest: 60, load: false,
-          unit: "라운드", cue: "갈비뼈가 뜨지 않게, 호흡 조절" }
-      ]
-    },
-    B: {
-      name: "웨이트 B", type: "weight", focus: "상체 당기기 우선, 견갑 안정화",
-      exercises: [
-        { id: "bench", name: "벤치프레스", sets: 3, reps: "6", rpe: "7", rest: 120, load: true,
+        { id: "squat", name: "백스쿼트", target: "허벅지", sets: 4, reps: "6", rpe: "7~8", rest: 80, load: true,
+          cue: "모든 렙에서 브레이싱, 무릎은 발끝 방향" },
+        { id: "bench", name: "벤치프레스", target: "가슴", sets: 3, reps: "8", rpe: "7", rest: 80, load: true,
           cue: "견갑을 모으고 내린 채 고정" },
-        { id: "csrow", name: "체스트 서포티드 로우", sets: 4, reps: "8", rpe: "7~8", rest: 90, load: true,
-          cue: "등 중간 수축, 라운드숄더 교정" },
-        { id: "pullup", video: "풀업 랫풀다운 자세", name: "풀업 또는 랫풀다운", sets: 3, reps: "8", rpe: "7", rest: 90, load: true,
-          cue: "어깨를 으쓱하지 않기" },
-        { id: "facepull", video: "페이스풀 밴드 풀어파트", name: "페이스풀 + 밴드 풀어파트", sets: 3, reps: "15 / 20", rpe: null, rest: 45, load: true,
-          cue: "어깨 바깥 회전, 하부 승모근" }
+        { id: "lunge", name: "덤벨 리버스 런지", target: "허벅지", sets: 3, reps: "8(한쪽씩)", rpe: "7", rest: 40, load: true, work: 70,
+          cue: "앞 무릎이 안으로 무너지지 않게, 상체 곧게" },
+        { id: "curl", name: "덤벨 컬", target: "이두", sets: 3, reps: "12", rpe: "7", rest: 40, load: true,
+          cue: "팔꿈치를 옆구리에 고정, 반동 없이" },
+        { id: "kneeraise", name: "행잉 니레이즈", target: "복근", sets: 3, reps: "12", rpe: null, rest: 40, load: false,
+          video: "행잉 니레이즈 자세", cue: "골반을 말아 올리고, 다리를 흔들지 않기" }
       ]
     },
-    C: {
-      name: "웨이트 C", type: "weight", focus: "힙힌지, 한쪽씩 하는 동작, 들고 걷기",
+    BACK: {
+      name: "웨이트 뒤쪽", type: "weight", focus: "몸 뒤쪽: 허리·힙, 등, 삼두",
       exercises: [
-        { id: "deadlift", video: "데드리프트 자세", name: "데드리프트(트랩바 가능)", sets: 4, reps: "4", rpe: "7~8", rest: 150, load: true,
-          cue: "들기 전 랫을 당겨 긴장 만들기" },
-        { id: "landmine", video: "랜드마인 프레스 자세", name: "랜드마인 프레스 또는 푸시업", sets: 3, reps: "10", rpe: "7", rest: 90, load: true,
-          cue: "어깨에 부담이 적은 밀기 동작" },
-        { id: "dbrow", name: "원암 덤벨 로우", sets: 3, reps: "10(한쪽씩)", rpe: "7", rest: 60, load: true,
-          cue: "몸통이 돌아가지 않게" },
-        { id: "carry", video: "파머스 캐리 팔로프 프레스", name: "파머스 캐리 + 팔로프 프레스", sets: 3, reps: "30m / 10회", rpe: null, rest: 60, load: true,
-          cue: "바른 자세 유지, 몸통 회전 버티기" }
+        { id: "rdl", name: "루마니안 데드리프트", target: "허리·힙", sets: 4, reps: "6", rpe: "7~8", rest: 80, load: true,
+          cue: "힙 힌지, 허리 중립" },
+        { id: "csrow", name: "체스트 서포티드 로우", target: "등", sets: 3, reps: "10", rpe: "7", rest: 80, load: true,
+          cue: "등 중간 수축, 라운드숄더 교정" },
+        { id: "pullup", name: "랫풀다운 또는 풀업", target: "등", sets: 3, reps: "10", rpe: "7", rest: 40, load: true,
+          video: "랫풀다운 자세", cue: "어깨를 으쓱하지 않기" },
+        { id: "hipthrust", name: "힙 쓰러스트", target: "힙", sets: 3, reps: "10", rpe: "7", rest: 40, load: true,
+          cue: "턱 당기고 갈비뼈 내린 채 엉덩이로 밀기" },
+        { id: "pushdown", name: "케이블 푸시다운", target: "삼두", sets: 3, reps: "12", rpe: "7", rest: 40, load: true,
+          cue: "팔꿈치 고정, 끝에서 1초 수축" }
       ]
     },
     S1: {

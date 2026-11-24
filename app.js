@@ -122,9 +122,40 @@
   }
 
   /* ---------- 오늘 초안(진행 상태) ---------- */
-  function defaultKey(dateStr) { return D.schedule[parseYmd(dateStr).getDay()] || "rest"; }
+  // "W"(웨이트) 날은 rotation 순서대로 돌아가며 배정. 기준일부터 지나간 W 날 수로 순서를 정합니다.
+  function resolveKey(dateStr) {
+    const k = D.schedule[parseYmd(dateStr).getDay()];
+    if (k !== "W") return k || "rest";
+    const rot = D.rotation || [];
+    if (!rot.length) return "rest";
+    const ref = settings().startDate || D.rotationStart || "2026-01-05";
+    const from = dateStr < ref ? dateStr : ref;
+    const to = dateStr < ref ? ref : dateStr;
+    let n = 0;
+    for (let d = parseYmd(from); ymd(d) < to; d.setDate(d.getDate() + 1)) {
+      if (D.schedule[d.getDay()] === "W") n++;
+    }
+    if (dateStr < ref) n = -n;
+    return rot[((n % rot.length) + rot.length) % rot.length];
+  }
+  function defaultKey(dateStr) { return resolveKey(dateStr); }
+  function mondayOf(dateStr) {
+    const d = parseYmd(dateStr);
+    d.setDate(d.getDate() - ((d.getDay() + 6) % 7));
+    return d;
+  }
+  function addDays(d, n) { const x = new Date(d); x.setDate(x.getDate() + n); return x; }
+
+  // 예상 소요 시간(분): 워밍업 + 세트마다 (동작 + 휴식) + 운동 사이 이동
+  function estimateMin(exercises) {
+    const sec = exercises.reduce((s, ex) => s + ex.sets * ((ex.work || D.setWorkSec || 45) + ex.rest), 0);
+    return Math.round((D.warmupMin || 0) + sec / 60 + (D.changeMin || 0) * exercises.length);
+  }
+
   function getDraft(dateStr) {
     const d = load(KEY.draft + dateStr, null);
+    // 루틴 키가 바뀌어 없어진 경우(예: 예전 A/B/C) 오늘 기본 루틴으로 되돌림
+    if (d && d.key !== "rest" && !D.workouts[d.key]) d.key = defaultKey(dateStr);
     if (d) return d;
     return { key: defaultKey(dateStr), sets: {}, weight: {}, rpe: {}, blocks: {}, css: "" };
   }
@@ -225,8 +256,9 @@
     html += '<div class="card"><p class="small"><strong>' + wInfo.week + "주차:</strong> " + esc(wk.note) + "</p></div>";
 
     if (workout.type === "weight") {
-      html += "<h2>운동</h2>";
-      workout.exercises.map(e => adjustExercise(e, wk)).forEach(ex => {
+      const exs = workout.exercises.map(e => adjustExercise(e, wk));
+      html += '<h2>운동 · 예상 약 ' + estimateMin(exs) + "분</h2>";
+      exs.forEach(ex => {
         const sets = draft.sets[ex.id] || [];
         const last = ex.load ? lastWeight(ex.id, date) : null;
         let hint = "";
@@ -246,7 +278,8 @@
           '<h3>' + videoLink(ex) + "</h3>" +
           '<div class="ex-meta"><span class="pill' + (ex.setsChanged ? " warn" : "") + '">' + ex.sets + "×" + esc(ex.reps) + (ex.unit ? " " + esc(ex.unit) : "") + "</span>" +
           (ex.rpe ? '<span class="pill' + (ex.rpeChanged ? " warn" : "") + '">RPE ' + esc(ex.rpe) + "</span>" : "") +
-          '<span class="pill">휴식 ' + fmtSec(ex.rest) + "</span></div>" +
+          '<span class="pill">휴식 ' + fmtSec(ex.rest) + "</span>" +
+          (ex.target ? '<span class="pill ok">' + esc(ex.target) + "</span>" : "") + "</div>" +
           '<p class="cue">' + esc(ex.cue) + "</p>" +
           '<div class="sets">' + setBtns + "</div>" +
           '<div class="inputs">' +
@@ -345,19 +378,32 @@
       '<div class="card"><div class="row between"><h3>' + sel + "주차 · " + esc(wk.label) + '</h3><span class="pill">RPE ' + esc(wk.rpe) + "</span></div>" +
       '<p class="small">' + esc(wk.note) + '</p><p class="muted small"><span class="changed">주황색</span>은 기본 루틴에서 바뀐 값입니다.</p></div>';
 
+    // 앞쪽·뒤쪽 교대: 이번 주와 다음 주 배치
+    const mon = mondayOf(today());
+    const rotLine = base => [1, 2, 3, 4, 5].filter(dow => D.schedule[dow] === "W").map(dow => {
+      const w = D.workouts[resolveKey(ymd(addDays(base, dow - 1)))];
+      return DAY_NAMES[dow] + " " + (w ? w.name.replace("웨이트 ", "") : "휴식");
+    }).join(" · ");
+    if (Object.values(D.schedule).includes("W")) {
+      html += '<div class="card"><p class="small"><strong>웨이트 교대</strong> 이번 주 ' + esc(rotLine(mon)) +
+        '</p><p class="muted small">다음 주 ' + esc(rotLine(addDays(mon, 7))) + "</p></div>";
+    }
+
     [1, 2, 3, 4, 5].forEach(dow => {
-      const key = D.schedule[dow];
+      const key = resolveKey(ymd(addDays(mon, dow - 1)));
       const w = D.workouts[key];
       if (!w) return;
       html += '<section class="card"><div class="row between"><h3>' + DAY_NAMES[dow] + " · " + esc(w.name) +
         (dow === todayDow ? ' <span class="today-badge small">오늘</span>' : "") + '</h3></div><p class="muted small">' + esc(w.focus) + '</p><ul class="plan-list">';
       if (w.type === "weight") {
-        w.exercises.map(e => adjustExercise(e, wk)).forEach(ex => {
-          html += "<li><span>" + videoLink(ex) + '</span><span class="v">' +
+        const exs = w.exercises.map(e => adjustExercise(e, wk));
+        exs.forEach(ex => {
+          html += "<li><span>" + videoLink(ex) + (ex.target ? ' <span class="muted small">' + esc(ex.target) + "</span>" : "") + '</span><span class="v">' +
             '<span class="' + (ex.setsChanged ? "changed" : "") + '">' + ex.sets + "</span>×" + esc(ex.reps) +
             (ex.rpe ? ' · <span class="' + (ex.rpeChanged ? "changed" : "") + '">RPE ' + esc(ex.rpe) + "</span>" : "") + "</span></li>";
         });
         if (wk.loadIncrease) html += '<li><span class="changed">중량 +' + wk.loadIncrease[0] + "~" + wk.loadIncrease[1] + "%</span><span></span></li>";
+        html += '<li><strong>예상 소요</strong><span class="v"><strong>약 ' + estimateMin(exs) + "분</strong></span></li>";
       } else {
         const blocks = w.blocks.map(b => adjustBlock(b, wk));
         blocks.forEach(b => {
@@ -679,7 +725,7 @@
       }
       case "rest": startTimer(Number(el.dataset.rest), el.dataset.label || ""); break;
       case "complete": completeToday(); break;
-      case "timer-add": addTimer(15); break;
+      case "timer-add": addTimer(40); break;
       case "timer-stop": stopTimer(); break;
       case "week": state.weekSel = Number(el.dataset.w); renderWeek(); break;
       case "del-rec":
