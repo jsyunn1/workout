@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#1d4ed8" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
+  <meta name="color-scheme" content="light dark">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="점심운동">
+  <title>점심 운동</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main id="view" aria-live="polite"></main>
+
+  <div id="timer" class="timer" hidden>
+    <div class="timer-info">
+      <span class="timer-label" id="timerLabel">휴식</span>
+      <span class="timer-time" id="timerTime">0:00</span>
+    </div>
+    <div class="timer-bar"><span id="timerFill"></span></div>
+    <div class="timer-actions">
+      <button type="button" class="btn ghost" data-act="timer-add">+15초</button>
+      <button type="button" class="btn ghost" data-act="timer-stop">정지</button>
+    </div>
+  </div>
+
+  <nav class="tabbar" aria-label="화면 전환">
+    <button type="button" data-tab="today" aria-current="page"><span class="ti">●</span>오늘</button>
+    <button type="button" data-tab="week"><span class="ti">▦</span>주간 계획</button>
+    <button type="button" data-tab="log"><span class="ti">↗</span>기록</button>
+    <button type="button" data-tab="info"><span class="ti">ⓘ</span>정보</button>
+  </nav>
+
+  <div id="toast" class="toast" role="status" hidden></div>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
